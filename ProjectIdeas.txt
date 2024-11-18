@@ -95,7 +95,6 @@ Identify pairs of stocks with long-term statistical relationships.
 Backtest the strategy to evaluate profitability and risk.
 Visualize spread and trading signals.
 Skills Highlighted: Statistical analysis, quantitative finance, and Python.
-By completing and showcasing projects like these, you will highlight your readiness for quantitative finance graduate studies and your ability to apply technical skills to real-world financial challenges.
 
 
 
