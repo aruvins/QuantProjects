@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
 import yfinance as yf
 
-stock = 'NVDA'
+stock = 'INTC'
 data = yf.download(stock, start='2020-01-01', end='2024-01-01')
+data['SMA_12'] = data['Close'].rolling(window=12).mean()
+data['SMA_26'] = data['Close'].rolling(window=26).mean()
 data['SMA_60'] = data['Close'].rolling(window=60).mean()
 data['SMA_180'] = data['Close'].rolling(window=180).mean()
 
@@ -14,47 +16,61 @@ def calculate_rsi(data, window=14):
     rsi = 100 - (100 / (1 + rs))  # RSI formula
     return rsi
 
+def showSimulation():
+    initial_capital = 10000
+    positions = initial_capital * data['Signal'].shift(1) * data['Close'].pct_change()
+    portfolio = positions.cumsum() + initial_capital
+
+    cagr = ((portfolio[-1] / portfolio[0]) ** (1 / len(data) * 252)) - 1
+    max_drawdown = (portfolio / portfolio.cummax()).min() - 1
+
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(portfolio, label='Portfolio Value')
+    plt.legend()
+    plt.title('Equity Curve of ' + stock)
+    plt.xlabel('Time')
+    plt.ylabel('Portfolio Value')
+    plt.grid(True)
+    plt.show()
 
 #buy and hold
 data.loc[:, 'Signal'] = 1
+showSimulation()
 
 #Simple SMA crossing strategy
-# data['Signal'] = 0
-# data.loc[data['SMA_60'] > data['SMA_180'], 'Signal'] = 1  # Buy signal
-# data.loc[data['SMA_0'] < data['SMA_180'], 'Signal'] = -1  # Sell signal
+data['Signal'] = 0
+data.loc[data['SMA_60'] > data['SMA_180'], 'Signal'] = 1  # Buy signal
+data.loc[data['SMA_60'] < data['SMA_180'], 'Signal'] = -1  # Sell signal
+showSimulation()
+
 
 #Buy if price is above SMA and sell if price is below SMA
-# data['Signal'] = 0  # Initialize Signal column
-# data.loc[data['Close'] > data['SMA_180'], 'Signal'] = 1  # Buy signal if price is above SMA
-# data.loc[data['Close'] < data['SMA_180'], 'Signal'] = -1  # Sell signal if price is below SMA
+data['Signal'] = 0  # Initialize Signal column
+data.loc[data['Close'] > data['SMA_180'], 'Signal'] = 1  # Buy signal if price is above SMA
+data.loc[data['Close'] < data['SMA_180'], 'Signal'] = -1  # Sell signal if price is below SMA
+showSimulation()
+
 
 #Buy if RSI is below or equal to 30 and sell if RSI is above 70
-# data['RSI'] = calculate_rsi(data)
-# data['Signal'] = 0
-# data.loc[data['RSI'] <= 30, 'Signal'] = 1  # Buy signal when RSI < 30
-# data.loc[data['RSI'] >= 70, 'Signal'] = -1  # Sell signal when RSI > 70
+data['RSI'] = calculate_rsi(data)
+data['Signal'] = 0
+data.loc[data['RSI'] <= 30, 'Signal'] = 1  # Buy signal when RSI < 30
+data.loc[data['RSI'] >= 70, 'Signal'] = -1  # Sell signal when RSI > 70
+showSimulation()
+
 
 #combine RSI and SMA strategy
-# data['RSI'] = calculate_rsi(data)
-# data['Signal'] = 0
-# data.loc[(data['RSI'] <= 30) | (data['SMA_60'] > data['SMA_180']), 'Signal'] = 1  # Buy signal when RSI < 30
-# data.loc[(data['RSI'] >= 70) | (data['SMA_60'] < data['SMA_180']), 'Signal'] = -1  # Sell signal when RSI > 70
+data['RSI'] = calculate_rsi(data)
+data['Signal'] = 0
+data.loc[(data['RSI'] <= 30) | (data['SMA_60'] > data['SMA_180']), 'Signal'] = 1  # Buy signal when RSI < 30
+data.loc[(data['RSI'] >= 70) | (data['SMA_60'] < data['SMA_180']), 'Signal'] = -1  # Sell signal when RSI > 70
+showSimulation()
 
 
-#Simulation of strategy
-initial_capital = 10000
-positions = initial_capital * data['Signal'].shift(1) * data['Close'].pct_change()
-portfolio = positions.cumsum() + initial_capital
-
-cagr = ((portfolio[-1] / portfolio[0]) ** (1 / len(data) * 252)) - 1
-max_drawdown = (portfolio / portfolio.cummax()).min() - 1
-
-
-plt.figure(figsize=(12, 6))
-plt.plot(portfolio, label='Portfolio Value')
-plt.legend()
-plt.title('Equity Curve of ' + stock)
-plt.xlabel('Time')
-plt.ylabel('Portfolio Value')
-plt.grid(True)
-plt.show()
+#Short term swing while considering long term trend
+#ex. WBA, EL, INTC
+data['Signal'] = 0  
+data.loc[(data['SMA_12'] < data['SMA_26']) & (data['Open'] > data['SMA_180']), 'Signal'] = 1  
+data.loc[(data['SMA_12'] > data['SMA_26']) | (data['Open'] < data['SMA_180']), 'Signal'] = -1
+showSimulation()
