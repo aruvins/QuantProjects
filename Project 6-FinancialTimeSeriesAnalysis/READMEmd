@@ -1,0 +1,22 @@
+6. Financial Time Series Analysis
+What to Build: Analyze historical stock price data to forecast trends using ARIMA, GARCH, or LSTM models.
+Key Features:
+Perform trend, volatility, and seasonality analysis.
+Build predictive models for short-term stock movements.
+Visualize predictions against actual trends.
+Skills Highlighted: Time series analysis, machine learning, and predictive modeling.
+
+Notes:
+The ARIMA model is applied to the closing prices with parameters order=(p, d, q), where:
+p is the number of lag observations to include (AR term),
+d is the number of differences to make the series stationary (I term),
+q is the size of the moving average window (MA term).
+
+#LSTM Model
+Epochs: More epochs allow the model to learn more, but too many can lead to overfitting.
+Batch Size: Affects gradient calculation. A smaller size makes the model update weights more frequently, but too small may lead to noise.
+Units: More units allow for capturing more complex patterns but increase the risk of overfitting.
+Layers: More layers enable the model to learn higher-level abstractions, but too many can slow down training and lead to overfitting.
+Dropout Rate: Higher rates help prevent overfitting but can slow training.
+Learning Rate: Affects how quickly the model learns. Too high might cause divergence, too low could slow down learning.
+Lookback: Affects how much past data is used for predictions. More past data can help capture trends, but too much may cause overfitting.
