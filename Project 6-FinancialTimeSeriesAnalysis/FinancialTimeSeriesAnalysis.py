@@ -31,7 +31,7 @@ print(data.describe())
 # #ARIMA model
 stock_price = data['Close']
 
-model = ARIMA(stock_price, order=(1, 3, 1))
+model = ARIMA(stock_price, order=(1, 2, 1))
 model_fit = model.fit()
 
 forecast_steps = 10
