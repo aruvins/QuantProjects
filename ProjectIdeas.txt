@@ -98,7 +98,7 @@ Skills Highlighted: Statistical analysis, quantitative finance, and Python.
 
 
 Bonus:
-- Using the Geometic Brownian motion formula build an understanding where the drift parameter becomes significant. 
+- Using the Geometric Brownian motion formula build an understanding where the drift parameter becomes significant. 
     dS/S = μ dt + σ dZ where:
         S: Current stock price
         μ: Drift parameter (expected return)
