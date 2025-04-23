@@ -107,7 +107,7 @@ Bonus:
         dZ: Increment of a standard Brownian motion
  This project can be useful in understanding the time scale in which a trend becomes a factor to consider in trading. For example, in day trading the trend (drift) is insignificant. On the other hand, if you were understanding a stock over 10 years the trend would be important.
  
-
-
+- Build out an implied volatility smile visualization
+    Should use time to expiration T and moneyness M = s/K to calculate implied volatility of the option
 
 
