@@ -110,4 +110,8 @@ Bonus:
 - Build out an implied volatility smile visualization
     Should use time to expiration T and moneyness M = s/K to calculate implied volatility of the option
 
+- Leveraged Buyout Model
+
+- Discounted Cash Flow Model
+
 
