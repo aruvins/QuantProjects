@@ -115,3 +115,8 @@ Bonus:
 - Discounted Cash Flow Model
 
 
+- Miscellaneous:
+    Folder of important mathematical concepts
+    
+
+
